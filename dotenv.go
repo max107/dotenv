@@ -3,11 +3,20 @@ package dotenv
 import (
 	"os"
 	"path"
+	"path/filepath"
+	"runtime"
 
 	"github.com/caarlos0/env/v10"
 	"github.com/joho/godotenv"
 	"github.com/matchsystems/werr"
 )
+
+// WorkDir get path to project root. Work only with go mod vendor
+func WorkDir() string {
+	_, b, _, _ := runtime.Caller(0)
+
+	return path.Join(filepath.Dir(b), "../../../../")
+}
 
 func dotenv(files []string) error {
 	items := make([]string, 0, len(files))
