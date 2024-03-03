@@ -11,10 +11,10 @@ import (
 	"github.com/matchsystems/werr"
 )
 
-var (
-	_, b, _, _ = runtime.Caller(0)
-	WorkDir    = filepath.Dir(b)
-)
+func WorkDir() string {
+	_, b, _, _ := runtime.Caller(0)
+	return filepath.Dir(b)
+}
 
 func dotenv(files []string) error {
 	items := make([]string, 0, len(files))
@@ -34,12 +34,12 @@ func dotenv(files []string) error {
 	return nil
 }
 
-func Load[T any]() (*T, error) {
+func Load[T any](workdir string) (*T, error) {
 	entity := new(T)
 
 	files := []string{
-		path.Join(WorkDir, "../../.env"),
-		path.Join(WorkDir, "../../.env.local"),
+		path.Join(workdir, ".env"),
+		path.Join(workdir, ".env.local"),
 	}
 
 	if err := dotenv(files); err != nil {
@@ -53,12 +53,12 @@ func Load[T any]() (*T, error) {
 	return entity, nil
 }
 
-func LoadTest[T any]() (*T, error) {
+func LoadTest[T any](workdir string) (*T, error) {
 	entity := new(T)
 
 	files := []string{
-		path.Join(WorkDir, "../../.env"),
-		path.Join(WorkDir, "../../.env.test"),
+		path.Join(workdir, ".env"),
+		path.Join(workdir, ".env.test"),
 	}
 
 	if err := dotenv(files); err != nil {
@@ -72,14 +72,14 @@ func LoadTest[T any]() (*T, error) {
 	return entity, nil
 }
 
-func MustLoad[T any]() *T {
-	c, _ := Load[T]()
+func MustLoad[T any](workdir string) *T {
+	c, _ := Load[T](workdir)
 
 	return c
 }
 
-func MustLoadTest[T any]() *T {
-	c, _ := LoadTest[T]()
+func MustLoadTest[T any](workdir string) *T {
+	c, _ := LoadTest[T](workdir)
 
 	return c
 }
