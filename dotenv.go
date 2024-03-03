@@ -3,18 +3,11 @@ package dotenv
 import (
 	"os"
 	"path"
-	"path/filepath"
-	"runtime"
 
 	"github.com/caarlos0/env/v10"
 	"github.com/joho/godotenv"
 	"github.com/matchsystems/werr"
 )
-
-func WorkDir() string {
-	_, b, _, _ := runtime.Caller(0)
-	return filepath.Dir(b)
-}
 
 func dotenv(files []string) error {
 	items := make([]string, 0, len(files))

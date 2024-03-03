@@ -19,16 +19,10 @@ func TestDotenv(t *testing.T) {
 	wd, err := os.Getwd()
 	require.NoError(t, err)
 
-	t.Run("workdir", func(t *testing.T) {
-		t.Parallel()
-
-		require.Equal(t, wd, dotenv.WorkDir())
-	})
-
 	t.Run("empty", func(t *testing.T) {
 		t.Parallel()
 
-		_, err := dotenv.Load[empty](dotenv.WorkDir())
+		_, err := dotenv.Load[empty](wd)
 		require.NoError(t, err)
 	})
 
@@ -42,7 +36,7 @@ func TestDotenv(t *testing.T) {
 	t.Run("valid", func(t *testing.T) {
 		t.Parallel()
 
-		c, err := dotenv.Load[empty](dotenv.WorkDir())
+		c, err := dotenv.Load[empty](wd)
 		require.NoError(t, err)
 		require.Equal(t, "bar", c.Foo)
 	})
